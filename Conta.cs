@@ -11,32 +11,32 @@ public class Conta
 
     public void Sacar(double valor)
     {
-        if(valor > Saldo)
-            throw new ArgumentException("Impossível fazer operação, o valor é maior do que o saldo.");
-        else if(valor < 0)
-            throw new ArgumentException("Impossível depositar valor negativo.");
-
+        ValidarValor(valor);
+        VerificarSaldo(valor);
         Saldo -= valor;
     }
 
     public void Depositar(double valor)
     {
-        if(valor < 0)
-            throw new ArgumentException("Impossível depositar valor negativo.");
-
+        ValidarValor(valor);
         Saldo += valor;
     }
 
     public void Transferir(double valor, Conta conta)
     {
-        if(Saldo >= valor)
-        {
-            Saldo -= valor;
-            conta.Depositar(valor);
-        }
-        else if(valor < 0)
-            throw new ArgumentException("Impossível transferir valor negativo.");
-        else
-            Console.WriteLine("Saldo insuficiente para fazer transferências.");
+        Sacar(valor);
+        conta.Depositar(valor);
+    }
+        
+    private void ValidarValor(double valor)
+    {
+        if(valor <= 0.0)
+            throw new ArgumentException("Valor deve ser maior que zero.");
+    }
+
+    private void VerificarSaldo(double valor)
+    {
+        if(valor > Saldo)
+            throw new ArgumentException("Saldo insuficiente.");
     }
 }
